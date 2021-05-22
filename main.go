@@ -24,7 +24,7 @@ func arreglo(seed int, size int) []int {
 	if isPrimo(seed) {// revisa si la semilla ingresada es valida
 		var slice = make([]int, size) //asi se crea un arreglo dinamico en go (slice)
 		for i := range slice {
-			seed = pseudoRand(seed)%200 // restringe a que sean valores menores a 200
+			seed = pseudoRand(seed) // restringe a que sean valores menores a 200
 			slice[i] = seed
 		}
 		return slice
@@ -36,7 +36,7 @@ func arreglo(seed int, size int) []int {
 }
 
 func pseudoRand(seed int) int {
-	m := 4080        // entre 11 y 101	//averiguar sobre este
+	m := 4096        // entre 11 y 101	//averiguar sobre este
 	a := 109             // y este numero
 	xn1 := (a * seed ) % m // algoritmo multiplicativo
 	return xn1
@@ -50,8 +50,20 @@ func pseudoRand(seed int) int {
 	Arbol Binario
 
 */
+ type binNode struct{
+	 left *binNode
+	 right *binNode
+	 value int 
+ }
 
 
+type binTree struct{
+	root *binNode
+}
+
+func binInsert(num int){
+
+}
 
 /*
 
@@ -59,7 +71,7 @@ func pseudoRand(seed int) int {
 
 */
 func main() {
-	fmt.Println( arreglo(53,200) )
+	fmt.Println( arreglo(37,200) )
 	// for i:=0; i<5; i++{
 	// 	fmt.Println(arreglo[i])
 	// }
