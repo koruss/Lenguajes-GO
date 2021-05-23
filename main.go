@@ -53,7 +53,8 @@ func pseudoRand(seed int) int {
  type binNode struct{
 	 left *binNode
 	 right *binNode
-	 value int 
+	 value int
+	 cont int 
  }
 
 
@@ -61,9 +62,50 @@ type binTree struct{
 	root *binNode
 }
 
-func binInsert(num int){
+
+
+func (tree *binTree) insertNode(data int){
+	if tree.root == nil{		// si el arbol no tiene nodos
+		tree.root = &binNode{
+			data: data,
+			left: nil,
+			right: nil,
+		}
+	}
 
 }
+
+func (tree *binTree) insert(data int) *binTree {
+	if tree.root == nil {// si el arbol esta vacio cree un nodo
+		tree.root = &binNode{data: data, left: nil, right: nil}
+	} else { // si no esta vacio llame a la funcion de insertar
+		tree.root.insert(data)
+	}
+	return tree
+}
+
+
+// esto funka pero modificar
+func (node *binNode) insert(data int){
+	if node == nil {
+		return
+	} else if data < node.data {
+		if node.left == nil {
+			node.left = &binNode{data: data, left: nil, right: nil}
+		} else {
+			node.left.insert(data)
+		}
+	} else {
+		if node.right == nil {
+			node.right = &binNode{
+				data: data, left: nil, right: nil
+			}
+		} else {
+			node.right.insert(data)
+		}
+	}
+}
+
 
 /*
 
