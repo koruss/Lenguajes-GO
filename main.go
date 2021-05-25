@@ -41,11 +41,11 @@ func pseudoRand(seed int) int {
 	return xn1
 }
 
-/*
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	Arbol Binario
+								Arbol Binario
 
-*/
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 type binNode struct {
 	left  *binNode
 	right *binNode
@@ -55,38 +55,87 @@ type binNode struct {
 
 type binTree struct {
 	root *binNode
+	size int // medir la cantidad
 }
 
-func (tree *binTree) insertNode(data int) *binTree {
+type response struct { // la tupla que pide el req 3 devolver
+	state       bool
+	comparisons int
+}
+
+//----------------------------------------------------------------------------------------------
+
+func (tree *binTree) insertNode(data int) int {
+	var comps = 0
 	if tree.root == nil { // si el arbol esta vacio cree un nodo
 		tree.root = &binNode{
 			value: data,
 			left:  nil,
 			right: nil}
+		tree.size++
 	} else { // si no esta vacio llame a la funcion de insertar
-		tree.root.insert(data)
+		comps = tree.root.insert(data, 0)
+		tree.size++
 	}
-	return tree
+	return comps
 }
 
-func (node *binNode) insert(data int) {
+func (node *binNode) insert(data int, cont int) int {
 	if node == nil { // si llego a una rama nula
-		return
+		return 1
 	} else if data < node.value { // si es menor
 		if node.left == nil { //si no hay nodo en el lado izq
-			node.left = &binNode{value: data, left: nil, right: nil} // cree un nodo y lo asigna
+			cont++
+			node.left = &binNode{value: data, left: nil, right: nil, cont: 1} // cree un nodo y lo asigna
+			return cont
+
+			//fmt.Println(cont)
 		} else { // si hay nodo entonces muevase
-			node.left.insert(data) // se llama recursivamente moviendose hasta encontrar un espacio vacio
+			cont++
+			return node.left.insert(data, cont) // se llama recursivamente moviendose hasta encontrar un espacio vacio
 		}
-	} else { // si es mayor
+	} else if data > node.value { // si es mayor
 		if node.right == nil { // si no hay nodo en el lado derecho
-			node.right = &binNode{value: data, left: nil, right: nil}
+			cont++
+			node.right = &binNode{value: data, left: nil, right: nil, cont: 1}
+			//fmt.Println(cont)
+			return cont
 		} else {
-			node.right.insert(data)
+			cont++
+			return node.right.insert(data, cont)
+
 		}
+	} else { // si no es mayor y no es menor el unico caso es que sea igual
+		node.cont++
 	}
+	return 0
 }
 
+func binSearch(root *binNode, key int, count int) response {
+	if root == nil {
+		return response{state: false, comparisons: count}
+	}
+	if root.value == key {
+		count++
+		return response{state: true, comparisons: count}
+	}
+	if root.value < key {
+		count++
+		return binSearch(root.right, key, count)
+	}
+	count++
+	return binSearch(root.left, key, count)
+}
+
+/*
+
+	Funciones Extra
+
+*/
+
+/*
+Recibe la raiz de un arbol binario y lo imprime
+*/
 func inOrder(root *binNode) {
 	if root == nil {
 		return
@@ -96,39 +145,47 @@ func inOrder(root *binNode) {
 	inOrder(root.right)        // derecha
 }
 
-func binSearch(binNode *binNode, key int) {
-	
-
-}
-
-func binSearchAux(root *binNode, key int, count int) int {
-	if root == nil || root.value == key {
-		return count
+func (root *binNode) treeStructure(n int) {
+	if root != nil {
+		root.right.treeStructure(n + 1)
+		for f := 0; f < n; f++ {
+			fmt.Print(">")
+		}
+		fmt.Println(root.value, "-")
+		root.left.treeStructure(n + 1)
 	}
-	if root.value < key {
-		count++
-		return binSearchAux(root.right, key, count)
-	}
-	count++
-	return binSearchAux(root.left, key, count)
 }
 
 /*
-
 	Funcion Principal
 
 */
 func main() {
 	//fmt.Println( arreglo(37,200) )
 	tree := binTree{}
-	tree.insertNode(10)
-	tree.insertNode(5)
-	tree.insertNode(12)
-	tree.insertNode(130)
-	tree.insertNode(45)
-	tree.insertNode(75)
-	tree.insertNode(35)
-	inOrder(tree.root)
+	// tree.insertNode(10)
+	// tree.insertNode(5)
+	// tree.insertNode(12)
+	// tree.insertNode(130)
+	// tree.insertNode(45)
+	// tree.insertNode(75)
+	// tree.insertNode(35)
+
+	fmt.Println(tree.insertNode(10))
+	fmt.Println(tree.insertNode(5))
+	fmt.Println(tree.insertNode(12))
+	fmt.Println(tree.insertNode(130))
+	fmt.Println(tree.insertNode(45))
+	fmt.Println(tree.insertNode(75))
+	fmt.Println(tree.insertNode(35))
+	fmt.Println(tree.insertNode(50))
+
+	//tree.root.treeStructure(tree.size)
+	//inOrder(tree.root)
+	//result := binSearch(tree.root,75,0)
+	//fmt.Println(tree)
+	// fmt.Println("\n")
+	// fmt.Println(tree.size)
 }
 
 // func main() {
