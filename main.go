@@ -2,12 +2,16 @@ package main
 
 import "fmt"
 
-/*
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	REQ 1
 
-*/
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
+/*
+Recibe un numero entre 11 y 101 y revisa si es primo
+Devuelve TRUE si es primo FALSE si no
+*/
 func isPrimo(seed int) bool { //
 	if seed >= 11 && seed <= 101 { // si esta en el rango permitido
 		for num := 2; num < seed/2; num++ { //revisa si es primo a fuerza bruta
@@ -20,6 +24,11 @@ func isPrimo(seed int) bool { //
 	return false
 }
 
+
+/*
+Funcion para crear un arreglo de tamanio  definido por el usuario
+Recibe un int la semilla para la generacion aleatoria y un int el tamanio del arreglo 
+*/
 func arreglo(seed int, size int) []int {
 	if isPrimo(seed) { // revisa si la semilla ingresada es valida
 		var slice = make([]int, size) //asi se crea un arreglo dinamico en go (slice)
@@ -33,11 +42,14 @@ func arreglo(seed int, size int) []int {
 	}
 
 }
-
+/*
+Generadora de numeros aleatorios, basado en la congruencia lineal
+*/
 func pseudoRand(seed int) int {
 	m := 4096             // entre 11 y 101	//averiguar sobre este
 	a := 109              // y este numero
-	xn1 := (a * seed) % m // algoritmo multiplicativo
+	b := 853
+	xn1 := (a * seed +b) % m // algoritmo multiplicativo
 	return xn1
 }
 
@@ -63,7 +75,7 @@ type response struct { // la tupla que pide el req 3 devolver
 	comparisons int
 }
 
-//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------//
 
 func (tree *binTree) insertNode(data int) int {
 	var comps = 0
@@ -127,6 +139,93 @@ func binSearch(root *binNode, key int, count int) response {
 	return binSearch(root.left, key, count)
 }
 
+//-----------------------------------------------------------------------
+
+func createDSW(tree *binTree){
+	if (tree.root != nil){
+		createBackBone(tree.root)
+		balancedTree(tree.root)
+	}
+}
+
+func createBackBone(root *binNode){
+	grandParent:= &binNode{}
+	parent := root
+	leftChild:= &binNode{}
+
+	for (parent != nil) {
+		leftChild = parent.left;
+		if (leftChild != nil) {
+		  grandParent = rotateRight(grandParent, parent, leftChild,root);
+		  parent = leftChild;
+		} else {
+		  grandParent = parent;
+		  parent = parent.right;
+		}
+	  }
+
+}
+
+func rotateRight(grandParent *binNode,parent *binNode, leftChild *binNode,root *binNode) *binNode{
+	if (grandParent!= nil) {
+		grandParent.right = leftChild;
+	  } else {
+		root = leftChild;
+	  }
+	  parent.left = leftChild.right;
+	  leftChild.right = parent;
+	  return grandParent;
+}
+func rotateLeft(grandParent *binNode,parent *binNode,rightChild *binNode,root *binNode) {
+	if (grandParent!=nil) {
+	  grandParent.right = rightChild;
+	} else {
+	  root = rightChild;
+	}
+	parent.right = rightChild.left;
+	rightChild.left = parent;
+  }
+
+func balancedTree(root *binNode){
+	n:=0
+	for temp := root; temp!=nil; temp = temp.right{
+		n++
+	}
+	m:= funcAux(n+1)-1
+	m/=2
+	makeRotations(m, root)
+}
+
+func funcAux(n int) int {
+	x := MSB(n);//MSB
+	return (1 << x);//2^x
+}
+
+func MSB(n int) int{
+	ndx := 0
+	for (1 < n) {
+	  n = (n >> 1);
+	  ndx++;
+	}
+	return ndx;
+  }
+
+func makeRotations(bound int,root *binNode)  {
+	grandParent:= &binNode{}
+	parent := root;
+	child := root.right;
+	for i:=bound; i > 0; i-- {
+		if (child!=nil) {
+			rotateLeft(grandParent, parent, child,root);
+			grandParent = child;
+			parent = grandParent.right;
+			child = parent.right;
+		} else {
+			break;
+		}
+	} 
+}
+  
 /*
 
 	Funciones Extra
@@ -145,16 +244,6 @@ func inOrder(root *binNode) {
 	inOrder(root.right)        // derecha
 }
 
-func (root *binNode) treeStructure(n int) {
-	if root != nil {
-		root.right.treeStructure(n + 1)
-		for f := 0; f < n; f++ {
-			fmt.Print(">")
-		}
-		fmt.Println(root.value, "-")
-		root.left.treeStructure(n + 1)
-	}
-}
 
 /*
 	Funcion Principal
@@ -163,25 +252,26 @@ func (root *binNode) treeStructure(n int) {
 func main() {
 	//fmt.Println( arreglo(37,200) )
 	tree := binTree{}
-	// tree.insertNode(10)
-	// tree.insertNode(5)
-	// tree.insertNode(12)
-	// tree.insertNode(130)
-	// tree.insertNode(45)
-	// tree.insertNode(75)
-	// tree.insertNode(35)
+	tree.insertNode(10)
+	tree.insertNode(5)
+	tree.insertNode(12)
+	tree.insertNode(130)
+	tree.insertNode(45)
+	tree.insertNode(75)
+	tree.insertNode(35)
 
-	fmt.Println(tree.insertNode(10))
-	fmt.Println(tree.insertNode(5))
-	fmt.Println(tree.insertNode(12))
-	fmt.Println(tree.insertNode(130))
-	fmt.Println(tree.insertNode(45))
-	fmt.Println(tree.insertNode(75))
-	fmt.Println(tree.insertNode(35))
-	fmt.Println(tree.insertNode(50))
+	// fmt.Println(tree.insertNode(10))
+	// fmt.Println(tree.insertNode(5))
+	// fmt.Println(tree.insertNode(12))
+	// fmt.Println(tree.insertNode(130))
+	// fmt.Println(tree.insertNode(45))
+	// fmt.Println(tree.insertNode(75))
+	// fmt.Println(tree.insertNode(35))
+	// fmt.Println(tree.insertNode(50))
 
 	//tree.root.treeStructure(tree.size)
-	//inOrder(tree.root)
+	inOrder(tree.root)
+	
 	//result := binSearch(tree.root,75,0)
 	//fmt.Println(tree)
 	// fmt.Println("\n")
