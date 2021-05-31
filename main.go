@@ -157,13 +157,12 @@ func (tree *binTree) rotateRight(grandParent *binNode, parent *binNode, leftChil
 
 func (tree *binTree) rotateLeft(grandParent *binNode, parent *binNode, rightChild *binNode) {
 	if grandParent != nil {
-
 		grandParent.right = rightChild
 	} else {
 		tree.root = rightChild
 	}
 	parent.right = rightChild.left
-	rightChild.left = grandParent
+	rightChild.left = parent
 	fmt.Println("ballshack")
 }
 
@@ -179,6 +178,7 @@ func (tree *binTree) createBackBone() {
 	grandParent := &binNode{}
 	parent := tree.root
 	leftChild := &binNode{}
+	grandParent = nil
 	for parent != nil {
 		leftChild = parent.left
 		if leftChild != nil {
@@ -189,7 +189,6 @@ func (tree *binTree) createBackBone() {
 			parent = parent.right
 		}
 	}
-
 }
 
 func (tree *binTree) balancedTree(root *binNode) {
@@ -230,8 +229,8 @@ func getCount(count int) int {
 
 	}
 	x := (int(math.Pow(2, float64(i-1)))) - 1
+	fmt.Println(x)
 	return x
-
 }
 
 func (tree *binTree) makeRotations(bound int) {
@@ -321,6 +320,8 @@ func main() {
 	// fmt.Println(tree.insertNode(75))
 	// fmt.Println(tree.insertNode(35))
 	// fmt.Println(tree.insertNode(50))
+	// createBackBone(tree.root)
+	// String(tree.root)
 
 	//tree.root.treeStructure(tree.size)
 	//inOrder(tree.root)
