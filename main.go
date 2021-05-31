@@ -163,7 +163,6 @@ func (tree *binTree) rotateLeft(grandParent *binNode, parent *binNode, rightChil
 	}
 	parent.right = rightChild.left
 	rightChild.left = parent
-	fmt.Println("ballshack")
 }
 
 func (tree *binTree) createDSW() {
@@ -196,13 +195,13 @@ func (tree *binTree) balancedTree(root *binNode) {
 	for temp := root; temp != nil; temp = temp.right {
 		n++
 	}
-	// m := funcAux(n+1) - 1
-	// for m > 1 {
-	// 	m= m/2
-	// 	makeRotations(m, root)
-	// }
-	m := getCount(n)
-	tree.makeRotations(m)
+
+	m := funcAux(n+1) - 1
+	tree.makeRotations(n - m)
+	for m > 1 {
+		tree.makeRotations(m)
+		m = m / 2
+	}
 
 }
 
@@ -234,6 +233,7 @@ func getCount(count int) int {
 }
 
 func (tree *binTree) makeRotations(bound int) {
+	fmt.Println("Comenzando cálculo de rotaciones.")
 	fmt.Println("Cantitad de rotaciones por hacer: " + strconv.Itoa(bound))
 	var grandParent *binNode
 	parent := tree.root
@@ -243,9 +243,11 @@ func (tree *binTree) makeRotations(bound int) {
 		if child != nil {
 			tree.rotateLeft(grandParent, parent, child)
 			grandParent = child
+			if parent == nil {
+				break
+			}
 			parent = grandParent.right
 			child = parent.right
-			fmt.Println(i)
 		} else {
 			break
 		}
