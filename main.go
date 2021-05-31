@@ -195,12 +195,11 @@ func (tree *binTree) balancedTree(root *binNode) {
 	for temp := root; temp != nil; temp = temp.right {
 		n++
 	}
-
 	m := funcAux(n+1) - 1
 	tree.makeRotations(n - m)
 	for m > 1 {
-		tree.makeRotations(m)
 		m = m / 2
+		tree.makeRotations(m)
 	}
 
 }
@@ -243,9 +242,6 @@ func (tree *binTree) makeRotations(bound int) {
 		if child != nil {
 			tree.rotateLeft(grandParent, parent, child)
 			grandParent = child
-			if parent == nil {
-				break
-			}
 			parent = grandParent.right
 			child = parent.right
 		} else {
