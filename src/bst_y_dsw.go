@@ -28,16 +28,15 @@ func isPrimo(seed int) bool { //
 	return false
 }
 
-/*
-Funcion para crear un arreglo de tamanio  definido por el usuario
-Recibe un int la semilla para la generacion aleatoria y un int el tamanio del arreglo
-*/
+/* Funcion para crear un arreglo de tamaño definido por el usuario. Recibe un int
+ * la semilla para la generacion aleatoria y un int el tamanio del arreglo */
+
 func arreglo(seed int, size int) []int {
 	if isPrimo(seed) { // revisa si la semilla ingresada es valida
 		var slice = make([]int, size) //asi se crea un arreglo dinamico en go (slice)
 		for i := range slice {
 			seed = pseudoRand(seed) // restringe a que sean valores menores a 200
-			slice[i] = seed
+			slice[i] = seed % 199
 		}
 		return slice
 	} else {
@@ -82,7 +81,7 @@ type response struct { // la tupla que pide el req 3 devolver
 //----------------------------------------------------------------------//
 
 func (tree *binTree) insertNode(data int) int {
-	var comps = 0
+	var comps = 1
 	if tree.root == nil { // si el arbol esta vacio cree un nodo
 		tree.root = &binNode{
 			value: data,
@@ -168,7 +167,7 @@ func (tree *binTree) rotateLeft(grandParent *binNode, parent *binNode, rightChil
 func (tree *binTree) createDSW() {
 	if tree.root != nil {
 		tree.createBackBone()
-		String(tree.root)
+		//String(tree.root) //Debug
 		tree.balancedTree(tree.root)
 	}
 }
@@ -238,7 +237,7 @@ func (tree *binTree) makeRotations(bound int) {
 	parent := tree.root
 	child := tree.root.right
 	for i := bound; i > 0; i-- {
-		String(tree.root)
+		//String(tree.root) //Debug
 		if child != nil {
 			tree.rotateLeft(grandParent, parent, child)
 			grandParent = child
@@ -287,4 +286,23 @@ func stringify(n *binNode, level int) {
 		fmt.Printf(format+"%d\n", n.value)
 		stringify(n.left, level)
 	}
+}
+
+func preorden_bst(cabeza *binNode) {
+	if cabeza == nil {
+		return
+	}
+	fmt.Println(cabeza.value)
+	preorden_bst(cabeza.left)
+	preorden_bst(cabeza.right)
+}
+
+func inorden_bst(cabeza *binNode) {
+	if cabeza == nil {
+		return
+	}
+
+	inorden_bst(cabeza.left)
+	fmt.Println(cabeza.value)
+	inorden_bst(cabeza.right)
 }

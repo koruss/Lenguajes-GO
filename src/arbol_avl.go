@@ -12,6 +12,7 @@ var COMP int = 0
 
 type arbol_avl struct {
 	raiz *nodo
+	size int
 }
 
 // Constructor del árbol AVL.
@@ -19,10 +20,11 @@ func crear_avl(p_llave int) *arbol_avl {
 	fmt.Println("Se ha creado un nuevo árbol AVL, tiene una raíz con llave: " + strconv.Itoa(p_llave))
 	return &arbol_avl{
 		raiz: crear_nodo(p_llave, 1),
+		size: 1,
 	}
 }
 
-func (arbol *arbol_avl) insertar(p_llave int) int {
+func (arbol *arbol_avl) insertar(p_llave int, verbose bool) int {
 	// Reiniciar el valor de COMP.
 	COMP = 0
 
@@ -35,11 +37,16 @@ func (arbol *arbol_avl) insertar(p_llave int) int {
 	result := buscar_aux(arbol.raiz, p_llave)
 
 	if result == nil {
+		arbol.size += 1
 		arbol.raiz = insertar_aux(arbol.raiz, p_llave, 1)
-		fmt.Println("Se ha ingresado un nodo nuevo con llave: " + strconv.Itoa(p_llave))
+		if verbose {
+			fmt.Println("Se ha ingresado un nodo nuevo con llave: " + strconv.Itoa(p_llave))
+		}
 	} else {
 		result.valor += 1
-		fmt.Println("Se ha ingresado una llave que ya existe, se ha incrementado el valor del nodo.")
+		if verbose {
+			fmt.Println("Se ha ingresado una llave que ya existe, se ha incrementado el valor del nodo.")
+		}
 	}
 	return COMP
 }
@@ -64,8 +71,11 @@ func (arbol *arbol_avl) remover() {
 
 }
 
-func (arbol *arbol_avl) indorden() {
-	inorden_aux(arbol.raiz)
+func (arbol *arbol_avl) indorden(verbose bool) {
+	if verbose {
+		fmt.Println("Imprimiendo el árbol AVL en preorden: ")
+	}
+	inorden_aux(arbol.raiz, verbose)
 }
 
 func (arbol *arbol_avl) preorden(verbose bool) {
@@ -93,14 +103,18 @@ func rotacion_izquierda(cab *nodo) *nodo {
 	return cab_nueva
 }
 
-func inorden_aux(cabeza *nodo) {
+func inorden_aux(cabeza *nodo, verbose bool) {
 	if cabeza == nil {
 		return
 	}
 
-	inorden_aux(cabeza.izq)
-	fmt.Println(cabeza.to_string())
-	inorden_aux(cabeza.der)
+	inorden_aux(cabeza.izq, verbose)
+	if verbose {
+		fmt.Println(cabeza.to_string())
+	} else {
+		fmt.Println(cabeza.llave)
+	}
+	inorden_aux(cabeza.der, verbose)
 }
 
 func preorden_aux(cabeza *nodo, verbose bool) {
@@ -124,23 +138,17 @@ func insertar_aux(cabeza *nodo, p_llave int, p_valor int) *nodo {
 		return temp
 	}
 	COMP += 1
-	// Una comparación por el segundo if.
+	// Una comparación de llaves.
 	if p_llave < cabeza.llave {
 		cabeza.izq = insertar_aux(cabeza.izq, p_llave, p_valor)
 	} else if p_llave > cabeza.llave {
-		COMP += 1
-		// Una comparación por el else if.
 		cabeza.der = insertar_aux(cabeza.der, p_llave, p_valor)
 	}
 
 	cabeza.altura = 1 + max(get_altura(cabeza.izq), get_altura(cabeza.der))
 	fac_bal := get_factor_balance(cabeza)
 
-	COMP += 1
-	// Una comparación por el tercer if.
 	if fac_bal > 1 {
-		COMP += 1
-		// Una comparación por el if anidado.
 		if p_llave < cabeza.izq.llave {
 			return rotacion_derecha(cabeza)
 		} else {
@@ -148,11 +156,7 @@ func insertar_aux(cabeza *nodo, p_llave int, p_valor int) *nodo {
 			return rotacion_derecha(cabeza)
 		}
 	} else if fac_bal < -1 {
-		COMP += 1
-		// Una comparación por el segundo else if.
 		if p_llave > cabeza.der.llave {
-			COMP += 1
-			// Una comparación por el if anidado.
 			return rotacion_izquierda(cabeza)
 		} else {
 			cabeza.der = rotacion_derecha(cabeza.der)
@@ -164,27 +168,23 @@ func insertar_aux(cabeza *nodo, p_llave int, p_valor int) *nodo {
 
 func buscar_aux(cabeza *nodo, p_llave int) *nodo {
 	COMP += 1
-	//Comparación por el primer if
+	//Comparación por el primer if.
 	if cabeza == nil {
 		return nil
 	}
 	llave := cabeza.llave
 	COMP += 1
-	//Comparación por el segundo if
+	//Comparación de llaves.
 	if llave == p_llave {
 		return cabeza
 	}
 	COMP += 1
-	//Comparación por el tercer if
+	//Comparación de llaves.
 	if llave > p_llave {
 		return buscar_aux(cabeza.izq, p_llave)
 	} else if llave < p_llave {
-		COMP += 1
-		//Comparación por el else if anidado.
 		return buscar_aux(cabeza.der, p_llave)
 	} else {
-		COMP += 1
-		//Comparación por el else if anidado.
 		return nil
 	}
 }
