@@ -1,9 +1,8 @@
 package main
 
-import (
-	"fmt"
-	"math"
-)
+import "fmt"
+
+
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
@@ -167,7 +166,7 @@ func rotateLeft(grandParent *binNode, parent *binNode, rightChild *binNode, root
 func createDSW(tree *binTree) {
 	if tree.root != nil {
 		createBackBone(tree.root)
-		String(tree.root)
+		//String(tree.root)
 		balancedTree(tree.root)
 	}
 }
@@ -176,6 +175,7 @@ func createBackBone(root *binNode) {
 	grandParent := &binNode{}
 	parent := root
 	leftChild := &binNode{}
+	grandParent= nil
 	for parent != nil {
 		leftChild = parent.left
 		if leftChild != nil {
@@ -186,7 +186,6 @@ func createBackBone(root *binNode) {
 			parent = parent.right
 		}
 	}
-
 }
 
 func balancedTree(root *binNode) {
@@ -194,14 +193,12 @@ func balancedTree(root *binNode) {
 	for temp := root; temp != nil; temp = temp.right {
 		n++
 	}
-	// m := funcAux(n+1) - 1
-	// for m > 1 {
-	// 	m= m/2
-	// 	makeRotations(m, root)
-	// }
-	m := getCount(n)
-	makeRotations(m, root)
-
+	m := funcAux(n+1) - 1
+	makeRotations( (n - m),root);
+	for m > 1 {
+		m= m/2
+		makeRotations(m, root)
+	}
 }
 
 func funcAux(n int) int {
@@ -218,28 +215,28 @@ func MSB(n int) int {
 	return ndx
 }
 
-func getCount(count int) int {
-	perfectCount := 0
-	i := 0
-	for perfectCount < count {
-		i++
-		perfectCount = (int(math.Pow(2, float64(i)))) - 1
+// func getCount(count int) int {
+// 	perfectCount := 0
+// 	i := 0
+// 	for perfectCount < count {
+// 		i++
+// 		perfectCount = (int(math.Pow(2, float64(i)))) - 1
 
-	}
-	x := (int(math.Pow(2, float64(i-1)))) - 1
-	return x
-
-}
+// 	}
+// 	x := (int(math.Pow(2, float64(i-1)))) - 1
+// 	fmt.Println(x)
+// 	return x
+// }
 
 func makeRotations(bound int, root *binNode) {
 	fmt.Println(bound)
 	grandParent := &binNode{}
+	grandParent = nil
 	parent := root
 	child := root.right
 	for i := bound; i > 0; i-- {
-		String(root)
 		if child != nil {
-			root = rotateLeft(grandParent, parent, child, root)
+			rotateLeft(grandParent, parent, child, root)
 			grandParent = child
 			parent = grandParent.right
 			child = parent.right
@@ -247,6 +244,7 @@ func makeRotations(bound int, root *binNode) {
 			break
 		}
 	}
+	String(root)
 }
 
 /*
@@ -266,6 +264,7 @@ func inOrder(root *binNode) {
 	fmt.Print(root.value, " ") // centro
 	inOrder(root.right)        // derecha
 }
+
 
 func String(root *binNode) {
 	fmt.Println("------------------------------------------------")
@@ -317,6 +316,8 @@ func main() {
 	// fmt.Println(tree.insertNode(75))
 	// fmt.Println(tree.insertNode(35))
 	// fmt.Println(tree.insertNode(50))
+	// createBackBone(tree.root)
+	// String(tree.root)
 
 	//tree.root.treeStructure(tree.size)
 	//inOrder(tree.root)
