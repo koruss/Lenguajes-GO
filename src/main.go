@@ -23,7 +23,6 @@ func insert_arr_avl(p_arr []int) *arbol_avl {
 		if first {
 			tree = crear_avl(num)
 			first = false
-			AVL_COMP += 1
 		}
 		AVL_COMP += tree.insertar(num, false)
 	}
@@ -49,47 +48,62 @@ func int_arr_to_string(p_arr []int) string {
 	return msg
 }
 
-func buscar_avl(p_arr []int, arbol *arbol_avl) {
-	var cmp int
-	var res bool
-	var fnd string
+func f64_arr_to_string(p_arr []float64) string {
+	var msg string
 	for _, num := range p_arr {
-		res, cmp = arbol.buscar(num, false)
-		if res {
-			fnd = "SÍ"
-		} else {
-			fnd = "NO"
-		}
-		println("Busqueda en AVL con llave: " + strconv.Itoa(num) + " ,¿Encontrado?: " + fnd + " ,Cantidad de comparaciones: " + strconv.Itoa(cmp))
+		msg += strconv.FormatFloat(num, 'g', 3, 64) + "\n"
+	}
+	return msg
+}
+
+func buscar_avl(p_arr []int, arbol *arbol_avl) {
+	// var cmp int
+	// var res bool
+	// var fnd string
+	for _, num := range p_arr {
+		// res, cmp =
+		arbol.buscar(num, false)
+		// if res {
+		// 	fnd = "SÍ"
+		// } else {
+		// 	fnd = "NO"
+		// }
+		// println("Busqueda en AVL con llave: " + strconv.Itoa(num) + " ,¿Encontrado?: " + fnd + " ,Cantidad de comparaciones: " + strconv.Itoa(cmp))
 	}
 }
 
 func buscar_bst(p_arr []int, arbol binTree) {
-	var fnd string
-	var resp response
+	// var fnd string
+	// var resp response
 	for _, num := range p_arr {
-		resp = binSearch(arbol.root, num, 0)
-		if resp.state {
-			fnd = "SÍ"
-		} else {
-			fnd = "NO"
-		}
-		println("Busqueda en BST con llave: " + strconv.Itoa(num) + " ,¿Encontrado?: " + fnd + " ,Cantidad de comparaciones: " + strconv.Itoa(resp.comparisons))
+		// resp =
+		binSearch(arbol.root, num)
+		// if resp.state {
+		// 	fnd = "SÍ"
+		// } else {
+		// 	fnd = "NO"
+		// }
+		// println("Busqueda en BST con llave: " + strconv.Itoa(num) + " ,¿Encontrado?: " + fnd + " ,Cantidad de comparaciones: " + strconv.Itoa(resp.comparisons))
 	}
 }
 
 func buscar_dsw(p_arr []int, arbol binTree) {
-	var fnd string
-	var resp response
+	// var fnd string
+	// var resp response
 	for _, num := range p_arr {
-		resp = binSearch(arbol.root, num, 0)
-		if resp.state {
-			fnd = "SÍ"
-		} else {
-			fnd = "NO"
-		}
-		println("Busqueda en DSW con llave: " + strconv.Itoa(num) + " ,¿Encontrado?: " + fnd + " ,Cantidad de comparaciones: " + strconv.Itoa(resp.comparisons))
+		// resp =
+		binSearch(arbol.root, num)
+		// if resp.state {
+		// 	fnd = "SÍ"
+		// } else {
+		// 	fnd = "NO"
+		// }
+		// println("Busqueda en DSW con llave: " + strconv.Itoa(num) + " ,¿Encontrado?: " + fnd + " ,Cantidad de comparaciones: " + strconv.Itoa(resp.comparisons))
 	}
+}
+
+func div_entero_to_float(int1 int, int2 int) float64 {
+	return float64(int1) / float64(int2)
 }
 
 /*
@@ -224,105 +238,107 @@ func main() {
 	buscar_dsw(a10000, dsw1000)
 
 	// Experimento d)
+	var alturas_avl = make([]int, 5)
+	var alturas_bst = make([]int, 5)
+	var alturas_dsw = make([]int, 5)
+
+	// Conseguir las alturas de los AVL.
+	alturas_avl[0] = avl200.raiz.altura
+	alturas_avl[1] = avl400.raiz.altura
+	alturas_avl[2] = avl600.raiz.altura
+	alturas_avl[3] = avl800.raiz.altura
+	alturas_avl[4] = avl1000.raiz.altura
+
+	fmt.Println("\nAltura del AVL de 200 elementos: " + strconv.Itoa(alturas_avl[0]))
+	fmt.Println("Altura del AVL de 400 elementos: " + strconv.Itoa(alturas_avl[1]))
+	fmt.Println("Altura del AVL de 600 elementos: " + strconv.Itoa(alturas_avl[2]))
+	fmt.Println("Altura del AVL de 800 elementos: " + strconv.Itoa(alturas_avl[3]))
+	fmt.Println("Altura del AVL de 1000 elementos: " + strconv.Itoa(alturas_avl[4]))
+
+	// Conseguir las alturas de los BST.
+	alturas_bst[0] = calcBSTHeight(bst200.root)
+	alturas_bst[1] = calcBSTHeight(bst400.root)
+	alturas_bst[2] = calcBSTHeight(bst600.root)
+	alturas_bst[3] = calcBSTHeight(bst800.root)
+	alturas_bst[4] = calcBSTHeight(bst1000.root)
+
+	fmt.Println("\nAltura del BST de 200 elementos: " + strconv.Itoa(alturas_bst[0]))
+	fmt.Println("Altura del BST de 400 elementos: " + strconv.Itoa(alturas_bst[1]))
+	fmt.Println("Altura del BST de 600 elementos: " + strconv.Itoa(alturas_bst[2]))
+	fmt.Println("Altura del BST de 800 elementos: " + strconv.Itoa(alturas_bst[3]))
+	fmt.Println("Altura del BST de 1000 elementos: " + strconv.Itoa(alturas_bst[4]))
+
+	// Conseguir las alturas de los DSW.
+	alturas_dsw[0] = calcBSTHeight(dsw200.root)
+	alturas_dsw[1] = calcBSTHeight(dsw400.root)
+	alturas_dsw[2] = calcBSTHeight(dsw600.root)
+	alturas_dsw[3] = calcBSTHeight(dsw800.root)
+	alturas_dsw[4] = calcBSTHeight(dsw1000.root)
+
+	fmt.Println("\nAltura del DSW de 200 elementos: " + strconv.Itoa(alturas_dsw[0]))
+	fmt.Println("Altura del DSW de 400 elementos: " + strconv.Itoa(alturas_dsw[1]))
+	fmt.Println("Altura del DSW de 600 elementos: " + strconv.Itoa(alturas_dsw[2]))
+	fmt.Println("Altura del DSW de 800 elementos: " + strconv.Itoa(alturas_dsw[3]))
+	fmt.Println("Altura del DSW de 1000 elementos: " + strconv.Itoa(alturas_dsw[4]))
+
+	//Cálculo de profundidad promedio por árbol
+	var prof_prom_avl = make([]float64, 5)
+	var prof_prom_bst = make([]float64, 5)
+	var prof_prom_dsw = make([]float64, 5)
+
+	prof_prom_avl[0] = div_entero_to_float(avl200.get_profundidad_sumada(), avl200.size)
+	prof_prom_avl[1] = div_entero_to_float(avl400.get_profundidad_sumada(), avl400.size)
+	prof_prom_avl[2] = div_entero_to_float(avl600.get_profundidad_sumada(), avl600.size)
+	prof_prom_avl[3] = div_entero_to_float(avl800.get_profundidad_sumada(), avl800.size)
+	prof_prom_avl[4] = div_entero_to_float(avl1000.get_profundidad_sumada(), avl1000.size)
+	fmt.Println("Profunidad promedio de los AVL:\n" + f64_arr_to_string(prof_prom_avl))
+
+	prof_prom_bst[0] = div_entero_to_float(bst200.get_profundidad_sumada_bst(), bst200.size)
+	prof_prom_bst[1] = div_entero_to_float(bst400.get_profundidad_sumada_bst(), bst400.size)
+	prof_prom_bst[2] = div_entero_to_float(bst600.get_profundidad_sumada_bst(), bst600.size)
+	prof_prom_bst[3] = div_entero_to_float(bst800.get_profundidad_sumada_bst(), bst800.size)
+	prof_prom_bst[4] = div_entero_to_float(bst1000.get_profundidad_sumada_bst(), bst1000.size)
+	fmt.Println("Profunidad promedio de los BST:\n" + f64_arr_to_string(prof_prom_bst))
+
+	prof_prom_dsw[0] = div_entero_to_float(dsw200.get_profundidad_sumada_bst(), dsw200.size)
+	prof_prom_dsw[1] = div_entero_to_float(dsw400.get_profundidad_sumada_bst(), dsw400.size)
+	prof_prom_dsw[2] = div_entero_to_float(dsw600.get_profundidad_sumada_bst(), dsw600.size)
+	prof_prom_dsw[3] = div_entero_to_float(dsw800.get_profundidad_sumada_bst(), dsw800.size)
+	prof_prom_dsw[4] = div_entero_to_float(dsw1000.get_profundidad_sumada_bst(), dsw1000.size)
+	fmt.Println("Profunidad promedio de los DSW:\n" + f64_arr_to_string(prof_prom_dsw))
+
+	//Cálculo de densidad por árbol
+	var dens_avl = make([]float64, 5)
+	var dens_bst = make([]float64, 5)
+	var dens_dsw = make([]float64, 5)
+
+	dens_avl[0] = div_entero_to_float(avl200.size, avl200.raiz.altura)
+	dens_avl[1] = div_entero_to_float(avl400.size, avl400.raiz.altura)
+	dens_avl[2] = div_entero_to_float(avl600.size, avl600.raiz.altura)
+	dens_avl[3] = div_entero_to_float(avl800.size, avl800.raiz.altura)
+	dens_avl[4] = div_entero_to_float(avl1000.size, avl1000.raiz.altura)
+	fmt.Println("Densidad de los AVL:\n" + f64_arr_to_string(dens_avl))
+
+	dens_bst[0] = div_entero_to_float(bst200.size, calcBSTHeight(bst200.root))
+	dens_bst[1] = div_entero_to_float(bst400.size, calcBSTHeight(bst400.root))
+	dens_bst[2] = div_entero_to_float(bst600.size, calcBSTHeight(bst600.root))
+	dens_bst[3] = div_entero_to_float(bst800.size, calcBSTHeight(bst800.root))
+	dens_bst[4] = div_entero_to_float(bst1000.size, calcBSTHeight(bst1000.root))
+	fmt.Println("Densidad de los BST:\n" + f64_arr_to_string(dens_bst))
+
+	dens_dsw[0] = div_entero_to_float(dsw200.size, calcBSTHeight(dsw200.root))
+	dens_dsw[1] = div_entero_to_float(dsw400.size, calcBSTHeight(dsw400.root))
+	dens_dsw[2] = div_entero_to_float(dsw600.size, calcBSTHeight(dsw600.root))
+	dens_dsw[3] = div_entero_to_float(dsw800.size, calcBSTHeight(dsw800.root))
+	dens_dsw[4] = div_entero_to_float(dsw1000.size, calcBSTHeight(dsw1000.root))
+	fmt.Println("Densidad de los DSW:\n" + f64_arr_to_string(dens_dsw))
+
+	//Comparaciones realizadas
+
+	// x := []int{10, 9, 11, 16, 18, 18, 18, 19, 6}
+	// tree := insert_arr_bst(x)
+	// // fmt.Println(tree.root)
+	// // fmt.Println(tree.insertNode(14))
+	// fmt.Println(tree.buscar(19))
+
 }
-
-// func uwu() {
-// 	fmt.Println("⡆⣐⢕⢕⢕⢕⢕⢕⢕⢕⠅⢗⢕⢕⢕⢕⢕⢕⢕⠕⠕⢕⢕⢕⢕⢕⢕⢕⢕⢕")
-//  fmt.Println("⢐⢕⢕⢕⢕⢕⣕⢕⢕⠕⠁⢕⢕⢕⢕⢕⢕⢕⢕⠅⡄⢕⢕⢕⢕⢕⢕⢕⢕⢕")
-// 	fmt.Println("⢕⢕⢕⢕⠁⢜⠕⢁⣴⣿⡇⢓⢕⢵⢐⢕⢕⠕⢁⣾⢿⣧⠑⢕⢕⠄⢑⢕⠅⢕")
-// 	fmt.Println("⢕⢕⠵⢁⠔⢁⣤⣤⣶⣶⣶⡐⣕⢽⠐⢕⠕⣡⣾⣶⣶⣶⣤⡁⢓⢕⠄⢑⢅⢑")
-// 	fmt.Println("⠍⣧⠄⣶⣾⣿⣿⣿⣿⣿⣿⣷⣔⢕⢄⢡⣾⣿⣿⣿⣿⣿⣿⣿⣦⡑⢕⢤⠱⢐")
-// 	fmt.Println("⢠⢕⠅⣾⣿⠋⢿⣿⣿⣿⠉⣿⣿⣷⣦⣶⣽⣿⣿⠈⣿⣿⣿⣿⠏⢹⣷⣷⡅⢐")
-// 	fmt.Println("⣔⢕⢥⢻⣿⡀⠈⠛⠛⠁⢠⣿⣿⣿⣿⣿⣿⣿⣿⡀⠈⠛⠛⠁⠄⣼⣿⣿⡇⢔")
-// 	fmt.Println("⢕⢕⢽⢸⢟⢟⢖⢖⢤⣶⡟⢻⣿⡿⠻⣿⣿⡟⢀⣿⣦⢤⢤⢔⢞⢿⢿⣿⠁⢕")
-// 	fmt.Println("⢕⢕⠅⣐⢕⢕⢕⢕⢕⣿⣿⡄⠛⢀⣦⠈⠛⢁⣼⣿⢗⢕⢕⢕⢕⢕⢕⡏⣘⢕")
-// 	fmt.Println("⢕⢕⠅⢓⣕⣕⣕⣕⣵⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣷⣕⢕⢕⢕⢕⡵⢀⢕⢕")
-// 	fmt.Println("⢑⢕⠃⡈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢃⢕⢕⢕")
-// 	fmt.Println("⣆⢕⠄⢱⣄⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢁⢕⢕⠕⢁")
-// 	fmt.Println("⣿⣦⡀⣿⣿⣷⣶⣬⣍⣛⣛⣛⡛⠿⠿⠿⠛⠛⢛⣛⣉⣭⣤⣂⢜⠕⢑⣡⣴⣿")
-// }
-
-// PRUEBAS VIEJAS
-// func pruebas_avl() {
-// 	tree := crear_avl(1)
-
-// 	// Código para demostrar los requerimientos 6 y 8 de la especificación.
-// 	fmt.Printf("\nInserciones al árbol AVL: \n")
-
-// 	var comp int
-// 	comp = tree.insertar(7)
-// 	println("Cantidad de comparaciones realizadas: " + strconv.Itoa(comp))
-
-// 	comp = tree.insertar(4)
-// 	println("Cantidad de comparaciones realizadas: " + strconv.Itoa(comp))
-
-// 	comp = tree.insertar(8)
-// 	println("Cantidad de comparaciones realizadas: " + strconv.Itoa(comp))
-
-// 	comp = tree.insertar(3)
-// 	println("Cantidad de comparaciones realizadas: " + strconv.Itoa(comp))
-
-// 	comp = tree.insertar(7)
-// 	println("Cantidad de comparaciones realizadas: " + strconv.Itoa(comp))
-
-// 	// Código para demostrar el requerimiento 7 de la especificación.
-// 	fmt.Printf("\nBúsqueda de una llave: \n")
-
-// 	var llave_busq = 2
-// 	var result, cmp = tree.buscar(llave_busq, false)
-
-// 	if result {
-// 		fmt.Println("Se logró encontrar el nodo con llave: " + strconv.Itoa(llave_busq))
-// 	} else {
-// 		fmt.Println("No se logró encontrar el nodo con llave: " + strconv.Itoa(llave_busq))
-// 	}
-// 	fmt.Println("Número de comparaciones: " + strconv.Itoa(cmp))
-
-// 	// Imprimir el árbol en preorden para verificar su estructura.
-
-// 	fmt.Printf("\nEstructura del árbol: \n")
-// 	tree.preorden(true)
-
-// 	fmt.Println(tree.raiz.altura)
-// 	fmt.Println(tree.size)
-// }
-
-// func main() {
-// 	//fmt.Println( arreglo(37,200) )
-// 	tree := binTree{}
-// 	tree.insertNode(2)
-// 	tree.insertNode(4)
-// 	tree.insertNode(5)
-// 	tree.insertNode(7)
-// 	tree.insertNode(8)
-// 	tree.insertNode(11)
-// 	tree.insertNode(12)
-// 	tree.insertNode(17)
-// 	tree.insertNode(18)
-// 	String(tree.root)
-
-// 	tree.createDSW()
-// 	String(tree.root)
-
-// 	// fmt.Println(tree.insertNode(10))
-// 	// fmt.Println(tree.insertNode(5))
-// 	// fmt.Println(tree.insertNode(12))
-// 	// fmt.Println(tree.insertNode(130))
-// 	// fmt.Println(tree.insertNode(45))
-// 	// fmt.Println(tree.insertNode(75))
-// 	// fmt.Println(tree.insertNode(35))
-// 	// fmt.Println(tree.insertNode(50))
-// 	// createBackBone(tree.root)
-// 	// String(tree.root)
-
-// 	//tree.root.treeStructure(tree.size)
-// 	//inOrder(tree.root)
-
-// 	//tree.String()
-
-// 	//result := binSearch(tree.root,75,0)
-// 	//fmt.Println(tree)
-// 	// fmt.Println("\n")
-// 	// fmt.Println(tree.size)
-// 	pruebas_avl()
-// }

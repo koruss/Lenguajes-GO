@@ -1,3 +1,3 @@
-module asig02.com
+module asig02
 
 go 1.16

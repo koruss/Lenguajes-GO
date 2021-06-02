@@ -6,6 +6,9 @@ import (
 	"strconv"
 )
 
+var PROF_SUM_BST int = 0
+var COMP_K int = 0
+
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	REQ 1
@@ -81,7 +84,8 @@ type response struct { // la tupla que pide el req 3 devolver
 //----------------------------------------------------------------------//
 
 func (tree *binTree) insertNode(data int) int {
-	var comps = 1
+	COMP_K = 1 // inicializar el contador global en 1 por la comparación que
+	//siempre se hace.
 	if tree.root == nil { // si el arbol esta vacio cree un nodo
 		tree.root = &binNode{
 			value: data,
@@ -89,57 +93,90 @@ func (tree *binTree) insertNode(data int) int {
 			right: nil}
 		tree.size++
 	} else { // si no esta vacio llame a la funcion de insertar
-		comps = tree.root.insert(data, 0)
+		tree.root.insert(data, 0)
 		tree.size++
 	}
-	return comps
+	return COMP_K
 }
 
-func (node *binNode) insert(data int, cont int) int {
+func calcBSTHeight(root *binNode) int {
+	if root == nil {
+		return 0
+	}
+	leftSide := calcBSTHeight(root.left)
+	rightSide := calcBSTHeight(root.right)
+	return max(leftSide, rightSide) + 1
+}
+
+func (arbol *binTree) get_profundidad_sumada_bst() int {
+	PROF_SUM_BST = 0
+	get_profundidad_sumada_bst_aux(arbol.root, 0)
+	return PROF_SUM_BST
+}
+
+func get_profundidad_sumada_bst_aux(cabeza *binNode, prof int) {
+	if cabeza == nil {
+		return
+	}
+
+	PROF_SUM_BST += prof
+	prof += 1
+
+	get_profundidad_sumada_bst_aux(cabeza.left, prof)
+	get_profundidad_sumada_bst_aux(cabeza.right, prof)
+}
+
+func (node *binNode) insert(data int, cont int) {
 	if node == nil { // si llego a una rama nula
-		return 1
+		return
 	} else if data < node.value { // si es menor
 		if node.left == nil { //si no hay nodo en el lado izq
-			cont++
+			COMP_K += 1
 			node.left = &binNode{value: data, left: nil, right: nil, cont: 1} // cree un nodo y lo asigna
-			return cont
+			return
 
 			//fmt.Println(cont)
 		} else { // si hay nodo entonces muevase
-			cont++
-			return node.left.insert(data, cont) // se llama recursivamente moviendose hasta encontrar un espacio vacio
+			COMP_K += 1
+			node.left.insert(data, cont) // se llama recursivamente moviendose hasta encontrar un espacio vacio
+			return
 		}
 	} else if data > node.value { // si es mayor
 		if node.right == nil { // si no hay nodo en el lado derecho
-			cont++
+			COMP_K += 1
 			node.right = &binNode{value: data, left: nil, right: nil, cont: 1}
 			//fmt.Println(cont)
-			return cont
+			return
 		} else {
-			cont++
-			return node.right.insert(data, cont)
+			COMP_K += 1
+			node.right.insert(data, cont)
+			return
 
 		}
 	} else { // si no es mayor y no es menor el unico caso es que sea igual
 		node.cont++
 	}
-	return 0
+}
+func (tree *binTree) buscar(key int) response {
+	COMP_K = 0
+	resp := binSearch(tree.root, key)
+
+	return resp
 }
 
-func binSearch(root *binNode, key int, count int) response {
+func binSearch(root *binNode, key int) response {
+	COMP_K += 1
 	if root == nil {
-		return response{state: false, comparisons: count}
+		return response{state: false, comparisons: COMP_K}
 	}
 	if root.value == key {
-		count++
-		return response{state: true, comparisons: count}
+		return response{state: true, comparisons: COMP_K}
 	}
 	if root.value < key {
-		count++
-		return binSearch(root.right, key, count)
+		return binSearch(root.right, key)
+	} else {
+		return binSearch(root.left, key)
 	}
-	count++
-	return binSearch(root.left, key, count)
 }
 
 //-----------------------------------------------------------------------

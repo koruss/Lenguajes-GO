@@ -9,6 +9,7 @@ import (
 // través de las llamadas recursivas realizadas a la hora de insertar o buscar
 // nodos dentro del árbol AVL.
 var COMP int = 0
+var PROF_SUM int = 0
 
 type arbol_avl struct {
 	raiz *nodo
@@ -28,26 +29,9 @@ func (arbol *arbol_avl) insertar(p_llave int, verbose bool) int {
 	// Reiniciar el valor de COMP.
 	COMP = 0
 
-	// Por la naturaleza de la función de inserción, si se inserta una llave
-	// repetida, la función la omite. Por esto es que primero se realiza una
-	// búsqueda para ver si el nodo ya existe en el árbol. Si sí existe,
-	// entonces se le incrementa el valor al nodo encontrado y no se inserta
-	// nada.
+	arbol.size += 1
+	arbol.raiz = insertar_aux(arbol.raiz, p_llave, 1)
 
-	result := buscar_aux(arbol.raiz, p_llave)
-
-	if result == nil {
-		arbol.size += 1
-		arbol.raiz = insertar_aux(arbol.raiz, p_llave, 1)
-		if verbose {
-			fmt.Println("Se ha ingresado un nodo nuevo con llave: " + strconv.Itoa(p_llave))
-		}
-	} else {
-		result.valor += 1
-		if verbose {
-			fmt.Println("Se ha ingresado una llave que ya existe, se ha incrementado el valor del nodo.")
-		}
-	}
 	return COMP
 }
 
@@ -85,6 +69,12 @@ func (arbol *arbol_avl) preorden(verbose bool) {
 	preorden_aux(arbol.raiz, verbose)
 }
 
+func (arbol *arbol_avl) get_profundidad_sumada() int {
+	PROF_SUM = 0
+	get_profundidad_sumada_aux(arbol.raiz, 0)
+	return PROF_SUM
+}
+
 func rotacion_derecha(cab *nodo) *nodo {
 	cab_nueva := cab.izq
 	cab.izq = cab_nueva.der
@@ -101,6 +91,18 @@ func rotacion_izquierda(cab *nodo) *nodo {
 	cab.altura = 1 + max(get_altura(cab.izq), get_altura(cab.der))
 	cab_nueva.altura = 1 + max(get_altura(cab_nueva.izq), get_altura(cab_nueva.der))
 	return cab_nueva
+}
+
+func get_profundidad_sumada_aux(cabeza *nodo, prof int) {
+	if cabeza == nil {
+		return
+	}
+
+	PROF_SUM += prof
+	prof += 1
+
+	get_profundidad_sumada_aux(cabeza.izq, prof)
+	get_profundidad_sumada_aux(cabeza.der, prof)
 }
 
 func inorden_aux(cabeza *nodo, verbose bool) {
@@ -131,18 +133,21 @@ func preorden_aux(cabeza *nodo, verbose bool) {
 }
 
 func insertar_aux(cabeza *nodo, p_llave int, p_valor int) *nodo {
-	COMP += 1
-	// Una comparación por el primer if.
 	if cabeza == nil {
+		COMP += 1
 		temp := crear_nodo(p_llave, p_valor)
 		return temp
 	}
+
 	COMP += 1
 	// Una comparación de llaves.
 	if p_llave < cabeza.llave {
 		cabeza.izq = insertar_aux(cabeza.izq, p_llave, p_valor)
 	} else if p_llave > cabeza.llave {
 		cabeza.der = insertar_aux(cabeza.der, p_llave, p_valor)
+	} else {
+		COMP += 1
+		cabeza.valor += 1
 	}
 
 	cabeza.altura = 1 + max(get_altura(cabeza.izq), get_altura(cabeza.der))
@@ -167,24 +172,23 @@ func insertar_aux(cabeza *nodo, p_llave int, p_valor int) *nodo {
 }
 
 func buscar_aux(cabeza *nodo, p_llave int) *nodo {
-	COMP += 1
-	//Comparación por el primer if.
+	//No se encuentra el nodo.
 	if cabeza == nil {
+		COMP += 1
 		return nil
 	}
 	llave := cabeza.llave
-	COMP += 1
-	//Comparación de llaves.
+
+	//Se encuentra el nodo.
 	if llave == p_llave {
+		COMP += 1
 		return cabeza
 	}
 	COMP += 1
 	//Comparación de llaves.
 	if llave > p_llave {
 		return buscar_aux(cabeza.izq, p_llave)
-	} else if llave < p_llave {
-		return buscar_aux(cabeza.der, p_llave)
 	} else {
-		return nil
+		return buscar_aux(cabeza.der, p_llave)
 	}
 }
