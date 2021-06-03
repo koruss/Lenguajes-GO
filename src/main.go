@@ -23,8 +23,9 @@ func insert_arr_avl(p_arr []int) *arbol_avl {
 		if first {
 			tree = crear_avl(num)
 			first = false
+		} else {
+			AVL_COMP += tree.insertar(num, false)
 		}
-		AVL_COMP += tree.insertar(num, false)
 	}
 	return tree
 }
@@ -42,64 +43,46 @@ func insert_arr_bst(p_arr []int) binTree {
 
 func int_arr_to_string(p_arr []int) string {
 	var msg string
+	cant := 200
 	for _, num := range p_arr {
-		msg += strconv.Itoa(num) + "\n"
+		msg += "Árbol de " + strconv.Itoa(cant) + " elementos: " + strconv.Itoa(num) + "\n"
+		cant += 200
 	}
 	return msg
 }
 
 func f64_arr_to_string(p_arr []float64) string {
 	var msg string
+	cant := 200
 	for _, num := range p_arr {
-		msg += strconv.FormatFloat(num, 'g', 3, 64) + "\n"
+		msg += "Árbol de " + strconv.Itoa(cant) + " elementos: " + strconv.FormatFloat(num, 'g', 3, 64) + "\n"
+		cant += 200
 	}
 	return msg
 }
 
-func buscar_avl(p_arr []int, arbol *arbol_avl) {
-	// var cmp int
-	// var res bool
+func buscar_avl(p_arr []int, arbol *arbol_avl) int {
+	// Reiniciar el valor de las comparaciones del AVL a cero.
+	AVL_COMP = 0
+	var cmp int
 	// var fnd string
 	for _, num := range p_arr {
-		// res, cmp =
-		arbol.buscar(num, false)
-		// if res {
-		// 	fnd = "SÍ"
-		// } else {
-		// 	fnd = "NO"
-		// }
-		// println("Busqueda en AVL con llave: " + strconv.Itoa(num) + " ,¿Encontrado?: " + fnd + " ,Cantidad de comparaciones: " + strconv.Itoa(cmp))
+		// En este caso el valor booleano no sirve de nada, solo las comparaciones.
+		_, cmp = arbol.buscar(num, false)
+		AVL_COMP += cmp
 	}
+	return AVL_COMP
 }
 
-func buscar_bst(p_arr []int, arbol binTree) {
-	// var fnd string
-	// var resp response
+func buscar_bst(p_arr []int, arbol binTree) int {
+	// Reiniciar el valor de las comparaciones del BST/DSW a cero.
+	BST_COMP = 0
+	var resp response
 	for _, num := range p_arr {
-		// resp =
-		binSearch(arbol.root, num)
-		// if resp.state {
-		// 	fnd = "SÍ"
-		// } else {
-		// 	fnd = "NO"
-		// }
-		// println("Busqueda en BST con llave: " + strconv.Itoa(num) + " ,¿Encontrado?: " + fnd + " ,Cantidad de comparaciones: " + strconv.Itoa(resp.comparisons))
+		resp = arbol.buscar(num)
+		BST_COMP += resp.comparisons
 	}
-}
-
-func buscar_dsw(p_arr []int, arbol binTree) {
-	// var fnd string
-	// var resp response
-	for _, num := range p_arr {
-		// resp =
-		binSearch(arbol.root, num)
-		// if resp.state {
-		// 	fnd = "SÍ"
-		// } else {
-		// 	fnd = "NO"
-		// }
-		// println("Busqueda en DSW con llave: " + strconv.Itoa(num) + " ,¿Encontrado?: " + fnd + " ,Cantidad de comparaciones: " + strconv.Itoa(resp.comparisons))
-	}
+	return BST_COMP
 }
 
 func div_entero_to_float(int1 int, int2 int) float64 {
@@ -113,7 +96,7 @@ func div_entero_to_float(int1 int, int2 int) float64 {
 func main() {
 	// Experimento a)
 
-	a200 := arreglo(37, 30)
+	a200 := arreglo(37, 200)
 	a400 := arreglo(11, 400)
 	a600 := arreglo(97, 600)
 	a800 := arreglo(17, 800)
@@ -127,115 +110,82 @@ func main() {
 
 	avl200 := insert_arr_avl(a200)
 	comparaciones_avl[0] = AVL_COMP
-	avl200.indorden(false)
 
 	avl400 := insert_arr_avl(a400)
 	comparaciones_avl[1] = AVL_COMP
-	avl400.indorden(false)
 
 	avl600 := insert_arr_avl(a600)
 	comparaciones_avl[2] = AVL_COMP
-	avl600.indorden(false)
 
 	avl800 := insert_arr_avl(a800)
 	comparaciones_avl[3] = AVL_COMP
-	avl800.indorden(false)
 
 	avl1000 := insert_arr_avl(a1000)
 	comparaciones_avl[4] = AVL_COMP
-	avl1000.indorden(false)
-
-	fmt.Println("\nArreglo de comparaciones avl: \n" + int_arr_to_string(comparaciones_avl))
 
 	// BST
 	bst200 := insert_arr_bst(a200)
 	comparaciones_dsw[0] = BST_COMP
-	inorden_bst(bst200.root)
 
 	bst400 := insert_arr_bst(a400)
 	comparaciones_dsw[1] = BST_COMP
-	inorden_bst(bst400.root)
 
 	bst600 := insert_arr_bst(a600)
 	comparaciones_dsw[2] = BST_COMP
-	inorden_bst(bst600.root)
 
 	bst800 := insert_arr_bst(a800)
 	comparaciones_dsw[3] = BST_COMP
-	inorden_bst(bst800.root)
 
 	bst1000 := insert_arr_bst(a1000)
 	comparaciones_dsw[4] = BST_COMP
-	inorden_bst(bst1000.root)
-
-	fmt.Println("\nArreglo de comparaciones BST: \n" + int_arr_to_string(comparaciones_bst))
 
 	// DSW
 	dsw200 := insert_arr_bst(a200)
 	comparaciones_bst[0] = BST_COMP
 	dsw200.createDSW()
-	inorden_bst(dsw200.root)
 
 	dsw400 := insert_arr_bst(a400)
 	comparaciones_bst[1] = BST_COMP
 	dsw400.createDSW()
-	inorden_bst(dsw400.root)
 
 	dsw600 := insert_arr_bst(a600)
 	comparaciones_bst[2] = BST_COMP
 	dsw600.createDSW()
-	inorden_bst(dsw600.root)
 
 	dsw800 := insert_arr_bst(a800)
 	comparaciones_bst[3] = BST_COMP
 	dsw800.createDSW()
-	inorden_bst(dsw800.root)
 
 	dsw1000 := insert_arr_bst(a1000)
 	comparaciones_bst[4] = BST_COMP
 	dsw1000.createDSW()
-	inorden_bst(dsw1000.root)
-
-	fmt.Println("\nArreglo de comparaciones DSW: \n" + int_arr_to_string(comparaciones_dsw))
 
 	// Experimento c)
 
+	// Arreglo de 10000 elementos pseudo aleatorios.
 	a10000 := arreglo(89, 10000)
-	fmt.Println("Búsequedas en árboles AVL")
-	fmt.Println("\nAVL de 200 elementos.")
-	buscar_avl(a10000, avl200)
-	fmt.Println("\nAVL de 400 elementos.")
-	buscar_avl(a10000, avl400)
-	fmt.Println("\nAVL de 600 elementos.")
-	buscar_avl(a10000, avl600)
-	fmt.Println("\nAVL de 800 elementos.")
-	buscar_avl(a10000, avl800)
-	fmt.Println("\nAVL de 1000 elementos.")
-	buscar_avl(a10000, avl1000)
 
-	fmt.Println("Búsequedas en árboles BST")
-	fmt.Println("\nBST de 200 elementos.")
-	buscar_bst(a10000, bst200)
-	fmt.Println("\nBST de 400 elementos.")
-	buscar_bst(a10000, bst400)
-	fmt.Println("\nBST de 600 elementos.")
-	buscar_bst(a10000, bst600)
-	fmt.Println("\nBST de 800 elementos.")
-	buscar_bst(a10000, bst800)
-	fmt.Println("\nBST de 1000 elementos.")
-	buscar_bst(a10000, bst1000)
+	var comp_busq_avl = make([]int, 5)
+	var comp_busq_bst = make([]int, 5)
+	var comp_busq_dsw = make([]int, 5)
 
-	fmt.Println("Búsequedas en árboles DSW")
-	fmt.Println("\nDSW de 200 elementos.")
-	buscar_dsw(a10000, dsw200)
-	fmt.Println("\nDSW de 400 elementos.")
-	buscar_dsw(a10000, dsw400)
-	fmt.Println("\nDSW de 600 elementos.")
-	buscar_dsw(a10000, dsw600)
-	fmt.Println("\nDSW de 800 elementos.")
-	buscar_dsw(a10000, dsw800)
-	fmt.Println("\nDSW de 1000 elementos.")
-	buscar_dsw(a10000, dsw1000)
+	comp_busq_avl[0] = buscar_avl(a10000, avl200)
+	comp_busq_avl[1] = buscar_avl(a10000, avl400)
+	comp_busq_avl[2] = buscar_avl(a10000, avl600)
+	comp_busq_avl[3] = buscar_avl(a10000, avl800)
+	comp_busq_avl[4] = buscar_avl(a10000, avl1000)
+
+	comp_busq_bst[0] = buscar_bst(a10000, bst200)
+	comp_busq_bst[1] = buscar_bst(a10000, bst400)
+	comp_busq_bst[2] = buscar_bst(a10000, bst600)
+	comp_busq_bst[3] = buscar_bst(a10000, bst800)
+	comp_busq_bst[4] = buscar_bst(a10000, bst1000)
+
+	comp_busq_dsw[0] = buscar_bst(a10000, dsw200)
+	comp_busq_dsw[1] = buscar_bst(a10000, dsw400)
+	comp_busq_dsw[2] = buscar_bst(a10000, dsw600)
+	comp_busq_dsw[3] = buscar_bst(a10000, dsw800)
+	comp_busq_dsw[4] = buscar_bst(a10000, dsw1000)
 
 	// Experimento d)
 	var alturas_avl = make([]int, 5)
@@ -335,10 +285,50 @@ func main() {
 
 	//Comparaciones realizadas
 
-	// x := []int{10, 9, 11, 16, 18, 18, 18, 19, 6}
+	fmt.Println("\nComparaciones realizadas al insertar.")
+	fmt.Println("Comparaciones de los AVL:\n" + int_arr_to_string(comparaciones_avl))
+	fmt.Println("Comparaciones de los BST:\n" + int_arr_to_string(comparaciones_bst))
+	fmt.Println("Comparaciones de los DSW:\n" + int_arr_to_string(comparaciones_dsw))
+
+	fmt.Println("\nComparaciónes realizadas al buscar.")
+	fmt.Println("Comparaciones de los AVL:\n" + int_arr_to_string(comp_busq_avl))
+	fmt.Println("Comparaciones de los BST:\n" + int_arr_to_string(comp_busq_bst))
+	fmt.Println("Comparaciones de los DSW:\n" + int_arr_to_string(comp_busq_dsw))
+
+	//Cantidad promedio de comparaciones realizadas para las inserciones
+	//realizadas, ponderadas por la altura donde se encuentra cada nodo.
+
+	var calc_prom_avl = make([]float64, 5)
+	var calc_prom_bst = make([]float64, 5)
+	var calc_prom_dsw = make([]float64, 5)
+
+	calc_prom_avl[0] = div_entero_to_float(avl200.calculo_ponderado(), avl200.size)
+	calc_prom_avl[1] = div_entero_to_float(avl400.calculo_ponderado(), avl400.size)
+	calc_prom_avl[2] = div_entero_to_float(avl600.calculo_ponderado(), avl600.size)
+	calc_prom_avl[3] = div_entero_to_float(avl800.calculo_ponderado(), avl800.size)
+	calc_prom_avl[4] = div_entero_to_float(avl1000.calculo_ponderado(), avl1000.size)
+	fmt.Println("Cantidad promedio de comparaciones realizadas para las inserciones, \nponderadas por la altura donde se encuentra cada nodo de los árboles AVL:\n" + f64_arr_to_string(calc_prom_avl))
+
+	calc_prom_bst[0] = div_entero_to_float(bst200.calculo_ponderado_bst(), bst200.size)
+	calc_prom_bst[1] = div_entero_to_float(bst400.calculo_ponderado_bst(), bst400.size)
+	calc_prom_bst[2] = div_entero_to_float(bst600.calculo_ponderado_bst(), bst600.size)
+	calc_prom_bst[3] = div_entero_to_float(bst800.calculo_ponderado_bst(), bst800.size)
+	calc_prom_bst[4] = div_entero_to_float(bst1000.calculo_ponderado_bst(), bst1000.size)
+	fmt.Println("Cantidad promedio de comparaciones realizadas para las inserciones, \nponderadas por la altura donde se encuentra cada nodo de los árboles BST:\n" + f64_arr_to_string(calc_prom_bst))
+
+	calc_prom_dsw[0] = div_entero_to_float(dsw200.calculo_ponderado_bst(), dsw200.size)
+	calc_prom_dsw[1] = div_entero_to_float(dsw400.calculo_ponderado_bst(), dsw400.size)
+	calc_prom_dsw[2] = div_entero_to_float(dsw600.calculo_ponderado_bst(), dsw600.size)
+	calc_prom_dsw[3] = div_entero_to_float(dsw800.calculo_ponderado_bst(), dsw800.size)
+	calc_prom_dsw[4] = div_entero_to_float(dsw1000.calculo_ponderado_bst(), dsw1000.size)
+	fmt.Println("Cantidad promedio de comparaciones realizadas para las inserciones, \nponderadas por la altura donde se encuentra cada nodo de los árboles DSW:\n" + f64_arr_to_string(calc_prom_dsw))
+
+	// x := []int{2, 4, 5, 7, 8, 11, 12, 17, 18, 18, 18, 18}
 	// tree := insert_arr_bst(x)
+	// tree.createDSW()
+	// String(tree.root)
 	// // fmt.Println(tree.root)
 	// // fmt.Println(tree.insertNode(14))
-	// fmt.Println(tree.buscar(19))
+	// fmt.Println(tree.calculo_ponderado_bst())
 
 }

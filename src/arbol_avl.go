@@ -57,7 +57,7 @@ func (arbol *arbol_avl) remover() {
 
 func (arbol *arbol_avl) indorden(verbose bool) {
 	if verbose {
-		fmt.Println("Imprimiendo el árbol AVL en preorden: ")
+		fmt.Println("Imprimiendo el árbol AVL en inorden: ")
 	}
 	inorden_aux(arbol.raiz, verbose)
 }
@@ -72,6 +72,13 @@ func (arbol *arbol_avl) preorden(verbose bool) {
 func (arbol *arbol_avl) get_profundidad_sumada() int {
 	PROF_SUM = 0
 	get_profundidad_sumada_aux(arbol.raiz, 0)
+	return PROF_SUM
+}
+
+func (arbol *arbol_avl) calculo_ponderado() int {
+	PROF_SUM = 0
+	// Comienza en 1 porque el nivel de un árbol comienza en uno en vez de cero.
+	calculo_ponderado_aux(arbol.raiz, 1)
 	return PROF_SUM
 }
 
@@ -103,6 +110,18 @@ func get_profundidad_sumada_aux(cabeza *nodo, prof int) {
 
 	get_profundidad_sumada_aux(cabeza.izq, prof)
 	get_profundidad_sumada_aux(cabeza.der, prof)
+}
+
+func calculo_ponderado_aux(cabeza *nodo, prof int) {
+	if cabeza == nil {
+		return
+	}
+
+	PROF_SUM += (prof * cabeza.valor)
+	prof += 1
+
+	calculo_ponderado_aux(cabeza.izq, prof)
+	calculo_ponderado_aux(cabeza.der, prof)
 }
 
 func inorden_aux(cabeza *nodo, verbose bool) {

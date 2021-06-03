@@ -1,0 +1,131 @@
+
+Altura del AVL de 200 elementos: 8
+Altura del AVL de 400 elementos: 9
+Altura del AVL de 600 elementos: 9
+Altura del AVL de 800 elementos: 9
+Altura del AVL de 1000 elementos: 9
+
+Altura del BST de 200 elementos: 14
+Altura del BST de 400 elementos: 14
+Altura del BST de 600 elementos: 16
+Altura del BST de 800 elementos: 16
+Altura del BST de 1000 elementos: 16
+
+Altura del DSW de 200 elementos: 8
+Altura del DSW de 400 elementos: 8
+Altura del DSW de 600 elementos: 8
+Altura del DSW de 800 elementos: 8
+Altura del DSW de 1000 elementos: 8
+
+Profunidad promedio de los AVL:
+Árbol de 200 elementos: 3.36
+Árbol de 400 elementos: 2.5
+Árbol de 600 elementos: 1.82
+Árbol de 800 elementos: 1.44
+Árbol de 1000 elementos: 1.16
+
+Profunidad promedio de los BST:
+Árbol de 200 elementos: 4.56
+Árbol de 400 elementos: 3.02
+Árbol de 600 elementos: 2.49
+Árbol de 800 elementos: 1.82
+Árbol de 1000 elementos: 1.7
+
+Profunidad promedio de los DSW:
+Árbol de 200 elementos: 3.28
+Árbol de 400 elementos: 2.48
+Árbol de 600 elementos: 1.79
+Árbol de 800 elementos: 1.41
+Árbol de 1000 elementos: 1.15
+
+Densidad de los AVL:
+Árbol de 200 elementos: 25
+Árbol de 400 elementos: 44.4
+Árbol de 600 elementos: 66.7
+Árbol de 800 elementos: 88.9
+Árbol de 1000 elementos: 111
+
+Densidad de los BST:
+Árbol de 200 elementos: 14.3
+Árbol de 400 elementos: 28.6
+Árbol de 600 elementos: 37.5
+Árbol de 800 elementos: 50
+Árbol de 1000 elementos: 62.5
+
+Densidad de los DSW:
+Árbol de 200 elementos: 25
+Árbol de 400 elementos: 50
+Árbol de 600 elementos: 75
+Árbol de 800 elementos: 100
+Árbol de 1000 elementos: 125
+
+
+Comparaciones realizadas al insertar.
+Comparaciones de los AVL:
+Árbol de 200 elementos: 1347
+Árbol de 400 elementos: 2902
+Árbol de 600 elementos: 4523
+Árbol de 800 elementos: 6083
+Árbol de 1000 elementos: 7590
+
+Comparaciones de los BST:
+Árbol de 200 elementos: 1565
+Árbol de 400 elementos: 3060
+Árbol de 600 elementos: 5120
+Árbol de 800 elementos: 6580
+Árbol de 1000 elementos: 9318
+
+Comparaciones de los DSW:
+Árbol de 200 elementos: 1565
+Árbol de 400 elementos: 3060
+Árbol de 600 elementos: 5120
+Árbol de 800 elementos: 6580
+Árbol de 1000 elementos: 9318
+
+
+Comparaciónes realizadas al buscar.
+Comparaciones de los AVL:
+Árbol de 200 elementos: 68872
+Árbol de 400 elementos: 68399
+Árbol de 600 elementos: 68549
+Árbol de 800 elementos: 69225
+Árbol de 1000 elementos: 68281
+
+Comparaciones de los BST:
+Árbol de 200 elementos: 85182
+Árbol de 400 elementos: 79460
+Árbol de 600 elementos: 90124
+Árbol de 800 elementos: 84465
+Árbol de 1000 elementos: 95212
+
+Comparaciones de los DSW:
+Árbol de 200 elementos: 67785
+Árbol de 400 elementos: 68091
+Árbol de 600 elementos: 67898
+Árbol de 800 elementos: 67767
+Árbol de 1000 elementos: 67660
+
+Cantidad promedio de comparaciones realizadas para las inserciones, 
+ponderadas por la altura donde se encuentra cada nodo de los árboles AVL:
+Árbol de 200 elementos: 6.07
+Árbol de 400 elementos: 6.54
+Árbol de 600 elementos: 6.72
+Árbol de 800 elementos: 6.8
+Árbol de 1000 elementos: 6.73
+
+Cantidad promedio de comparaciones realizadas para las inserciones, 
+ponderadas por la altura donde se encuentra cada nodo de los árboles BST:
+Árbol de 200 elementos: 7.83
+Árbol de 400 elementos: 7.65
+Árbol de 600 elementos: 8.53
+Árbol de 800 elementos: 8.22
+Árbol de 1000 elementos: 9.32
+
+Cantidad promedio de comparaciones realizadas para las inserciones, 
+ponderadas por la altura donde se encuentra cada nodo de los árboles DSW:
+Árbol de 200 elementos: 6.1
+Árbol de 400 elementos: 6.57
+Árbol de 600 elementos: 6.68
+Árbol de 800 elementos: 6.77
+Árbol de 1000 elementos: 6.84
+

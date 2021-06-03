@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math"
-	"strconv"
 )
 
 var PROF_SUM_BST int = 0
@@ -89,6 +88,7 @@ func (tree *binTree) insertNode(data int) int {
 	if tree.root == nil { // si el arbol esta vacio cree un nodo
 		tree.root = &binNode{
 			value: data,
+			cont:  1,
 			left:  nil,
 			right: nil}
 		tree.size++
@@ -112,6 +112,25 @@ func (arbol *binTree) get_profundidad_sumada_bst() int {
 	PROF_SUM_BST = 0
 	get_profundidad_sumada_bst_aux(arbol.root, 0)
 	return PROF_SUM_BST
+}
+
+func (arbol *binTree) calculo_ponderado_bst() int {
+	PROF_SUM_BST = 0
+	calculo_ponderado_bst_aux(arbol.root, 1)
+	return PROF_SUM_BST
+}
+
+func calculo_ponderado_bst_aux(cabeza *binNode, prof int) {
+	if cabeza == nil {
+		return
+	}
+
+	//fmt.Println(strconv.Itoa(prof) + "  " + strconv.Itoa(cabeza.cont)) //DEBUG
+	PROF_SUM_BST += (prof * cabeza.cont)
+	prof += 1
+
+	calculo_ponderado_bst_aux(cabeza.left, prof)
+	calculo_ponderado_bst_aux(cabeza.right, prof)
 }
 
 func get_profundidad_sumada_bst_aux(cabeza *binNode, prof int) {
@@ -157,6 +176,7 @@ func (node *binNode) insert(data int, cont int) {
 		node.cont++
 	}
 }
+
 func (tree *binTree) buscar(key int) response {
 	COMP_K = 0
 	resp := binSearch(tree.root, key)
@@ -263,13 +283,13 @@ func getCount(count int) int {
 
 	}
 	x := (int(math.Pow(2, float64(i-1)))) - 1
-	fmt.Println(x)
+	//fmt.Println(x)
 	return x
 }
 
 func (tree *binTree) makeRotations(bound int) {
-	fmt.Println("Comenzando cálculo de rotaciones.")
-	fmt.Println("Cantitad de rotaciones por hacer: " + strconv.Itoa(bound))
+	// fmt.Println("Comenzando cálculo de rotaciones.")
+	// fmt.Println("Cantitad de rotaciones por hacer: " + strconv.Itoa(bound))
 	var grandParent *binNode
 	parent := tree.root
 	child := tree.root.right
